@@ -46,9 +46,10 @@ normalized_logs = raw_logs.withColumn(
 )
 
 # Deterministic regex mapping is transparent, fast, and easy for data stewards to audit.
+# SQL expr is used because both the input text and regex pattern are columns.
 mapped = (
     normalized_logs.crossJoin(F.broadcast(taxonomy))
-    .filter(F.col("normalized_skill_text").rlike(F.col("match_pattern")))
+    .filter(F.expr("normalized_skill_text RLIKE match_pattern"))
     .select(
         "event_id",
         "employee_id",
