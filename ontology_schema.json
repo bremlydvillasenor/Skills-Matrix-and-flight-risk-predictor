@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Invisible Skill Matrix Talent Graph Ontology",
+  "description": "Governed ontology for employee, skill, skill ownership, and reporting relationships.",
+  "version": "1.0.0",
+  "vertices": {
+    "Employee": {
+      "primary_key": "id",
+      "properties": {
+        "id": {"type": "string", "description": "Stable employee graph identifier."},
+        "name": {"type": "string", "description": "Employee display name for synthetic portfolio data."},
+        "engagement_score": {"type": "number", "minimum": 1.0, "maximum": 5.0, "description": "Latest governed engagement score; values below 3.0 indicate elevated flight risk."}
+      },
+      "required": ["id", "name", "engagement_score"]
+    },
+    "Skill": {
+      "primary_key": "id",
+      "properties": {
+        "id": {"type": "string", "description": "Stable standardized skill identifier."},
+        "standard_name": {"type": "string", "description": "Canonical taxonomy skill name."},
+        "category": {"type": "string", "description": "Skill family used for talent planning."}
+      },
+      "required": ["id", "standard_name", "category"]
+    }
+  },
+  "edges": {
+    "HAS_SKILL": {
+      "source_vertex": "Employee",
+      "target_vertex": "Skill",
+      "properties": {
+        "src": {"type": "string", "description": "Employee vertex id."},
+        "dst": {"type": "string", "description": "Skill vertex id."},
+        "proficiency": {"type": "integer", "minimum": 1, "maximum": 5, "description": "Observed proficiency score."}
+      },
+      "required": ["src", "dst", "proficiency"]
+    },
+    "REPORTS_TO": {
+      "source_vertex": "Employee",
+      "target_vertex": "Employee",
+      "properties": {
+        "src": {"type": "string", "description": "Direct report employee vertex id."},
+        "dst": {"type": "string", "description": "Manager employee vertex id."}
+      },
+      "required": ["src", "dst"]
+    }
+  }
+}
